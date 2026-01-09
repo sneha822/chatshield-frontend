@@ -36,7 +36,7 @@ export const useChat = (token, roomId = 'general') => {
         const loadUsers = async () => {
             try {
                 const data = await api.getRoomUsers(roomId);
-                setUsers(data.users || []);
+                setUsers([...new Set(data.users || [])]);
             } catch (err) {
                 console.error('Failed to load users', err);
             }
@@ -59,7 +59,7 @@ export const useChat = (token, roomId = 'general') => {
 
                 // Update users list if present in any event type
                 if (data.users) {
-                    setUsers(data.users);
+                    setUsers([...new Set(data.users)]);
                 }
 
                 switch (data.type) {
