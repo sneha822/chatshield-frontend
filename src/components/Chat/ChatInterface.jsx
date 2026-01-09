@@ -202,7 +202,7 @@ const ChatInterface = () => {
                 </header>
 
                 {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-0.5">
+                <div className="flex-1 overflow-y-auto p-2 space-y-0.5">
                     {messages.length === 0 && (
                         <div className="flex items-center justify-center h-full text-neutral-400 text-sm">
                             No messages yet. Start the conversation!

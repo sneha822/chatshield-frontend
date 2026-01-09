@@ -1,18 +1,52 @@
+/**
+ * Toxicity level definitions
+ * Using theme-consistent colors for a cohesive design
+ */
 export const TOXICITY_LEVELS = {
-    SAFE: { label: 'Safe', color: 'bg-green-100 text-green-700', border: 'border-green-200' },
-    MILD: { label: 'Mild', color: 'bg-yellow-100 text-yellow-700', border: 'border-yellow-200' },
-    SEVERE: { label: 'Severe', color: 'bg-red-100 text-red-700', border: 'border-red-200' }
+    SAFE: {
+        label: 'Safe',
+        threshold: 0.35
+    },
+    MILD: {
+        label: 'Mild',
+        threshold: 0.75
+    },
+    SEVERE: {
+        label: 'Severe',
+        threshold: 1.0
+    }
 };
 
+/**
+ * Determine toxicity level based on score
+ * @param {Object} toxicity - Toxicity object with 'toxicity' property (0-1)
+ * @returns {Object} The toxicity level object
+ */
 export const getToxicityLevel = (toxicity) => {
-    if (!toxicity || typeof toxicity.toxicity !== 'number') return TOXICITY_LEVELS.SAFE;
+    if (!toxicity || typeof toxicity.toxicity !== 'number') {
+        return TOXICITY_LEVELS.SAFE;
+    }
 
     const score = toxicity.toxicity;
-    if (score < 0.35) return TOXICITY_LEVELS.SAFE;
-    if (score < 0.75) return TOXICITY_LEVELS.MILD;
+
+    if (score < TOXICITY_LEVELS.SAFE.threshold) {
+        return TOXICITY_LEVELS.SAFE;
+    }
+    if (score < TOXICITY_LEVELS.MILD.threshold) {
+        return TOXICITY_LEVELS.MILD;
+    }
     return TOXICITY_LEVELS.SEVERE;
 };
 
+/**
+ * Format timestamp to readable time
+ * @param {string|Date} timestamp - The timestamp to format
+ * @returns {string} Formatted time string (HH:MM)
+ */
 export const formatTime = (timestamp) => {
-    return new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (!timestamp) return '';
+    return new Date(timestamp).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
 };

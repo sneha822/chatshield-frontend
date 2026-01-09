@@ -46,7 +46,7 @@ const RoomSelection = () => {
     };
 
     return (
-        <div className="min-h-screen bg-neutral-50">
+        <div className="min-h-screen bg-bg-main">
             {/* Header */}
             <header className="bg-bg-surface border-b border-border-base">
                 <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
