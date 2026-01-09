@@ -110,11 +110,12 @@ const MessageBubble = ({ message, onDelete, isFirst = true, isLast = true }) => 
                 <div
                     onClick={() => shouldBlur && setIsRevealed(true)}
                     className={clsx(
-                        'relative px-2 py-1.5 min-w-[70px] rounded-md',
+                        'relative px-2 py-1.5 min-w-[70px] rounded-md border',
                         isOwnMessage
                             ? 'bg-bubble-sender text-white'
                             : 'bg-bg-surface text-text-main',
-                        shouldBlur && 'cursor-pointer'
+                        shouldBlur && 'cursor-pointer',
+                        isSevere ? 'border-red-500' : 'border-transparent',
                     )}
                 >
                     {/* Message content */}
