@@ -33,6 +33,18 @@ export const api = {
         return response.json();
     },
 
+    async getMyRooms(token) {
+        const response = await fetch(`${API_BASE_URL}/chat/my-rooms`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Failed to fetch my rooms');
+        }
+        return response.json();
+    },
+
     async getRooms(token) {
         const response = await fetch(`${API_BASE_URL}/chat/rooms`, {
             headers: {
@@ -89,6 +101,14 @@ export const api = {
         if (!response.ok) {
             throw new Error('Failed to delete message');
         }
+    },
+
+    async getRoomUsers(roomId) {
+        const response = await fetch(`${API_BASE_URL}/chat/rooms/${roomId}/users`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch users');
+        }
+        return response.json();
     },
 
     async getRoomMessages(roomId) {

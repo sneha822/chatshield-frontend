@@ -17,12 +17,12 @@ const ChatInterface = () => {
     const [showAnalytics, setShowAnalytics] = useState(false);
     const messagesEndRef = useRef(null);
 
-    const { messages, users, isConnected, error, sendMessage } = useChat(token, currentRoom);
+    const { messages, users, isConnected, error, sendMessage, deleteMessage } = useChat(token, currentRoom);
 
     useEffect(() => {
         const fetchRooms = async () => {
             try {
-                const data = await api.getRooms(token);
+                const data = await api.getMyRooms(token);
                 setRooms(data.rooms || []);
             } catch (err) {
                 console.error('Failed to fetch rooms', err);
@@ -79,7 +79,30 @@ const ChatInterface = () => {
 
                 {/* Rooms */}
                 <div className="flex-1 overflow-y-auto p-3">
-                    <div className="mb-2">
+                    <div className="mb-4">
+                        <h3 className="text-xs font-medium text-neutral-400 uppercase tracking-wider px-2 mb-2">
+                            My Rooms
+                        </h3>
+                        <div className="space-y-1">
+                            {rooms.map(room => (
+                                <button
+                                    key={room.id}
+                                    onClick={() => navigate(`/chat/room/${room.id}`)}
+                                    className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${currentRoom === room.id
+                                            ? 'bg-neutral-900 text-white'
+                                            : 'text-neutral-600 hover:bg-neutral-100'
+                                        }`}
+                                >
+                                    # {room.name || room.id}
+                                </button>
+                            ))}
+                            {rooms.length === 0 && (
+                                <p className="text-xs text-neutral-400 px-2 italic">No joined rooms.</p>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="pt-2 border-t border-neutral-100">
                         <h3 className="text-xs font-medium text-neutral-400 uppercase tracking-wider px-2 mb-2">
                             Join / Create
                         </h3>
@@ -186,7 +209,7 @@ const ChatInterface = () => {
                         </div>
                     )}
                     {messages.map((msg, index) => (
-                        <MessageBubble key={index} message={msg} />
+                        <MessageBubble key={msg.id || index} message={msg} onDelete={deleteMessage} />
                     ))}
                     <div ref={messagesEndRef} />
                     {error && (

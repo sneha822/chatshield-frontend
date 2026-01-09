@@ -32,7 +32,20 @@ export const useChat = (token, roomId = 'general') => {
                 console.error('Failed to load history', err);
             }
         };
+
+        const loadUsers = async () => {
+            try {
+                const data = await api.getRoomUsers(roomId);
+                setUsers(data.users || []);
+            } catch (err) {
+                console.error('Failed to load users', err);
+            }
+        };
+
         loadHistory();
+        loadUsers();
+
+
 
         ws.onopen = () => {
             setIsConnected(true);
@@ -44,18 +57,35 @@ export const useChat = (token, roomId = 'general') => {
             try {
                 const data = JSON.parse(event.data);
 
+                // Update users list if present in any event type
+                if (data.users) {
+                    setUsers(data.users);
+                }
+
                 switch (data.type) {
                     case 'join':
-                    case 'leave':
-                        // System message + user list update
+                        // Join always has content
                         setMessages(prev => [...prev, { ...data, isSystem: true }]);
-                        if (data.users) {
-                            setUsers(data.users);
-                        }
+                        break;
+
+                    case 'sync':
+                        // Sync never shows chat bubble, just updates users (handled above)
+                        break;
+
+                    case 'leave':
+                        // Don't show bubble for leave, just update users (handled above)
                         break;
 
                     case 'chat':
                         setMessages(prev => [...prev, data]);
+                        // If the echoed message lacks an ID, fetch history to get the persisted message (with ID)
+                        if (!data.id && !data._id && !data.message_id) {
+                            loadHistory();
+                        }
+                        break;
+
+                    case 'delete':
+                        setMessages(prev => prev.filter(msg => (msg.id || msg._id || msg.message_id) !== data.message_id));
                         break;
 
                     case 'error':
@@ -97,5 +127,15 @@ export const useChat = (token, roomId = 'general') => {
         }
     }, []);
 
-    return { messages, users, isConnected, error, sendMessage };
+    const deleteMessage = useCallback(async (messageId) => {
+        try {
+            await api.deleteMessage(messageId, token);
+            setMessages(prev => prev.filter(msg => (msg.id || msg._id || msg.message_id) !== messageId));
+        } catch (err) {
+            console.error('Failed to delete message:', err);
+            setError('Failed to delete message');
+        }
+    }, [token]);
+
+    return { messages, users, isConnected, error, sendMessage, deleteMessage };
 };

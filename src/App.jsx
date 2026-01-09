@@ -43,7 +43,7 @@ function App() {
                 <Register />
               </PublicRoute>
             } />
-            <Route path="/chat" element={<Navigate to="/chat/room/general" replace />} />
+            <Route path="/chat" element={<Navigate to="/rooms" replace />} />
             <Route path="/chat/room/:roomId" element={
               <ProtectedRoute>
                 <ChatInterface />
