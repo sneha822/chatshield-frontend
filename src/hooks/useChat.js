@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { API_BASE_URL, api } from '../services/api';
+import { api } from '../services/api';
+import { getWebSocketUrl, deduplicateUsers, parseMessage } from '../utils/wsUtils';
+import { getMessageId, MESSAGE_TYPES } from '../utils/chatUtils';
 
 export const useChat = (token, roomId = 'general') => {
     const [messages, setMessages] = useState([]);
@@ -11,19 +13,10 @@ export const useChat = (token, roomId = 'general') => {
     useEffect(() => {
         if (!token) return;
 
-        // Construct WebSocket URL
-        // Guide: ws://localhost:8000/ws?token=<YOUR_ACCESS_TOKEN>&room=general
-        // We need to use query parameters for token and room.
-        const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        // Assuming API_BASE_URL is http://localhost:8000, we replace http with ws (or wss)
-        // Note: API_BASE_URL might not include 'http', but in our api.js it does.
-        const wsBase = API_BASE_URL.replace(/^http/, 'ws');
-        const wsUrl = `${wsBase}/ws?token=${token}&room=${roomId}`;
-
+        const wsUrl = getWebSocketUrl(token, roomId);
         const ws = new WebSocket(wsUrl);
         wsRef.current = ws;
 
-        // Fetch history
         const loadHistory = async () => {
             try {
                 const history = await api.getRoomMessages(roomId);
@@ -36,7 +29,7 @@ export const useChat = (token, roomId = 'general') => {
         const loadUsers = async () => {
             try {
                 const data = await api.getRoomUsers(roomId);
-                setUsers([...new Set(data.users || [])]);
+                setUsers(deduplicateUsers(data.users));
             } catch (err) {
                 console.error('Failed to load users', err);
             }
@@ -45,8 +38,6 @@ export const useChat = (token, roomId = 'general') => {
         loadHistory();
         loadUsers();
 
-
-
         ws.onopen = () => {
             setIsConnected(true);
             setError(null);
@@ -54,49 +45,42 @@ export const useChat = (token, roomId = 'general') => {
         };
 
         ws.onmessage = (event) => {
-            try {
-                const data = JSON.parse(event.data);
+            const data = parseMessage(event.data);
+            if (!data) return;
 
-                // Update users list if present in any event type
-                if (data.users) {
-                    setUsers([...new Set(data.users)]);
-                }
+            // Update users list if present in any event type
+            if (data.users) {
+                setUsers(deduplicateUsers(data.users));
+            }
 
-                switch (data.type) {
-                    case 'join':
-                        // Join always has content
-                        setMessages(prev => [...prev, { ...data, isSystem: true }]);
-                        break;
+            switch (data.type) {
+                case MESSAGE_TYPES.JOIN:
+                    setMessages(prev => [...prev, { ...data, isSystem: true }]);
+                    break;
 
-                    case 'sync':
-                        // Sync never shows chat bubble, just updates users (handled above)
-                        break;
+                case MESSAGE_TYPES.SYNC:
+                case MESSAGE_TYPES.LEAVE:
+                    // Handled by user list update above
+                    break;
 
-                    case 'leave':
-                        // Don't show bubble for leave, just update users (handled above)
-                        break;
+                case MESSAGE_TYPES.CHAT:
+                    setMessages(prev => [...prev, data]);
+                    // If the echoed message fails to have an ID (rare), reload to be safe
+                    if (!getMessageId(data)) {
+                        loadHistory();
+                    }
+                    break;
 
-                    case 'chat':
-                        setMessages(prev => [...prev, data]);
-                        // If the echoed message lacks an ID, fetch history to get the persisted message (with ID)
-                        if (!data.id && !data._id && !data.message_id) {
-                            loadHistory();
-                        }
-                        break;
+                case MESSAGE_TYPES.DELETE:
+                    setMessages(prev => prev.filter(msg => getMessageId(msg) !== data.message_id));
+                    break;
 
-                    case 'delete':
-                        setMessages(prev => prev.filter(msg => (msg.id || msg._id || msg.message_id) !== data.message_id));
-                        break;
+                case MESSAGE_TYPES.ERROR:
+                    setError(data.content);
+                    break;
 
-                    case 'error':
-                        setError(data.content);
-                        break;
-
-                    default:
-                        console.warn('Unknown message type:', data.type);
-                }
-            } catch (err) {
-                console.error('Failed to parse message:', err);
+                default:
+                    console.warn('Unknown message type:', data.type);
             }
         };
 
@@ -130,7 +114,7 @@ export const useChat = (token, roomId = 'general') => {
     const deleteMessage = useCallback(async (messageId) => {
         try {
             await api.deleteMessage(messageId, token);
-            setMessages(prev => prev.filter(msg => (msg.id || msg._id || msg.message_id) !== messageId));
+            setMessages(prev => prev.filter(msg => getMessageId(msg) !== messageId));
         } catch (err) {
             console.error('Failed to delete message:', err);
             setError('Failed to delete message');

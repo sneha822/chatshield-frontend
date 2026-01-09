@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { api } from '../services/api';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { api, setAuthErrorHandler } from '../services/api';
 
 const AuthContext = createContext(null);
 
@@ -8,6 +8,20 @@ export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem('token'));
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    // Logout function - defined with useCallback so it's stable for the auth error handler
+    const logout = useCallback(() => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        setToken(null);
+        setUser(null);
+    }, []);
+
+    // Register auth error handler for automatic logout on 401
+    useEffect(() => {
+        setAuthErrorHandler(logout);
+        return () => setAuthErrorHandler(null);
+    }, [logout]);
 
     useEffect(() => {
         // Ideally we would validate the token here or fetch user profile
@@ -42,13 +56,6 @@ export const AuthProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
-    };
-
-    const logout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('username');
-        setToken(null);
-        setUser(null);
     };
 
     const register = async (username, password) => {

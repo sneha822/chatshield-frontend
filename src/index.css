@@ -2,6 +2,50 @@
 
 @theme {
   --font-family-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --color-bg-main: var(--bg-main);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-surface-hover: var(--bg-surface-hover);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
+  --color-border-base: var(--border-base);
+  --color-input-bg: var(--input-bg);
+}
+
+:root {
+  /* Dark Blue & Greenish Theme */
+  --bg-main: #070b18;
+  /* Slate 950 - Deepest Blue */
+  --bg-surface: #0f172a;
+  /* Slate 900 - Surface */
+  --bg-surface-hover: #1e293b;
+  /* Slate 800 */
+
+  /* Primary: Vibrant Green/Teal */
+  --primary: #10b981;
+  /* Emerald 500 */
+  --primary-hover: #059669;
+  /* Emerald 600 */
+
+  /* Secondary: Complementary Blue */
+  --secondary: #0ea5e9;
+  /* Sky 500 */
+
+  /* Text */
+  --text-main: #f8fafc;
+  /* Slate 50 */
+  --text-muted: #94a3b8;
+  /* Slate 400 */
+
+  /* Borders */
+  --border-base: #1e293b;
+  /* Slate 800 */
+
+  /* Inputs */
+  --input-bg: #020617;
 }
 
 @keyframes fadeIn {
@@ -36,8 +80,8 @@
   body {
     margin: 0;
     padding: 0;
-    background-color: #fafafa;
-    color: #111;
+    background-color: var(--color-bg-main);
+    color: var(--color-text-main);
     font-family: var(--font-family-sans);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;

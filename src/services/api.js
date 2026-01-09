@@ -1,5 +1,26 @@
 export const API_BASE_URL = 'http://localhost:8000';
 
+// Auth error handler - will be set by AuthContext
+let onAuthError = null;
+
+export const setAuthErrorHandler = (handler) => {
+    onAuthError = handler;
+};
+
+/**
+ * Helper to handle response and trigger logout on 401
+ */
+const handleAuthResponse = async (response) => {
+    if (response.status === 401) {
+        // Token expired or invalid - trigger logout
+        if (onAuthError) {
+            onAuthError();
+        }
+        throw new Error('Session expired. Please log in again.');
+    }
+    return response;
+};
+
 export const api = {
     async register(username, password) {
         const response = await fetch(`${API_BASE_URL}/auth/register`, {
@@ -39,6 +60,7 @@ export const api = {
                 'Authorization': `Bearer ${token}`
             }
         });
+        await handleAuthResponse(response);
         if (!response.ok) {
             throw new Error('Failed to fetch my rooms');
         }
@@ -51,6 +73,7 @@ export const api = {
                 'Authorization': `Bearer ${token}`
             }
         });
+        await handleAuthResponse(response);
         if (!response.ok) {
             throw new Error('Failed to fetch rooms');
         }
@@ -97,7 +120,7 @@ export const api = {
                 'Content-Type': 'application/json'
             }
         });
-
+        await handleAuthResponse(response);
         if (!response.ok) {
             throw new Error('Failed to delete message');
         }

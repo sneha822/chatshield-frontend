@@ -64,16 +64,16 @@ const ChatInterface = () => {
     };
 
     return (
-        <div className="flex h-screen bg-neutral-50">
+        <div className="flex h-screen bg-bg-main">
             {/* Sidebar */}
-            <aside className="w-64 bg-white border-r border-neutral-200 flex flex-col">
+            <aside className="w-64 bg-bg-surface border-r border-border-base flex flex-col">
                 {/* Logo */}
-                <div className="p-4 border-b border-neutral-200">
+                <div className="p-4 border-b border-border-base">
                     <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-neutral-900 rounded-lg flex items-center justify-center">
-                            <span className="text-white text-xs font-bold">CS</span>
+                        <div className="w-8 h-8 flex items-center justify-center">
+                            <img src="/images/logo.png" alt="ChatShield Logo" className="w-full h-full object-contain" />
                         </div>
-                        <span className="font-semibold text-neutral-900">ChatShield</span>
+                        <span className="font-semibold text-text-main">ChatShield</span>
                     </div>
                 </div>
 
@@ -88,9 +88,9 @@ const ChatInterface = () => {
                                 <button
                                     key={room.id}
                                     onClick={() => navigate(`/chat/room/${room.id}`)}
-                                    className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${currentRoom === room.id
-                                            ? 'bg-neutral-900 text-white'
-                                            : 'text-neutral-600 hover:bg-neutral-100'
+                                    className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${currentRoom === room.id
+                                        ? 'bg-primary/20 text-primary font-medium border border-primary/20'
+                                        : 'text-text-muted hover:bg-bg-main hover:text-text-main'
                                         }`}
                                 >
                                     # {room.name || room.id}
@@ -102,8 +102,8 @@ const ChatInterface = () => {
                         </div>
                     </div>
 
-                    <div className="pt-2 border-t border-neutral-100">
-                        <h3 className="text-xs font-medium text-neutral-400 uppercase tracking-wider px-2 mb-2">
+                    <div className="pt-2 border-t border-border-base">
+                        <h3 className="text-xs font-medium text-text-muted uppercase tracking-wider px-2 mb-2">
                             Join / Create
                         </h3>
                     </div>
@@ -115,7 +115,7 @@ const ChatInterface = () => {
                                 placeholder="Room name..."
                                 value={newRoomInput}
                                 onChange={(e) => setNewRoomInput(e.target.value)}
-                                className="flex-1 px-2.5 py-1.5 bg-neutral-50 border border-neutral-200 rounded-md text-xs focus:outline-none focus:ring-1 focus:ring-neutral-400"
+                                className="flex-1 px-2.5 py-1.5 bg-input-bg border border-border-base rounded-md text-xs text-text-main focus:outline-none focus:ring-1 focus:ring-primary placeholder:text-gray-600"
                             />
                             <button
                                 type="button"
@@ -126,14 +126,14 @@ const ChatInterface = () => {
                                     }
                                 }}
                                 title="Join Room"
-                                className="px-2.5 py-1.5 bg-neutral-100 text-neutral-700 rounded-md text-xs hover:bg-neutral-200 transition-colors"
+                                className="px-2.5 py-1.5 bg-bg-main border border-border-base text-text-muted rounded-md text-xs hover:text-text-main hover:border-text-muted transition-colors"
                             >
                                 →
                             </button>
                             <button
                                 type="submit"
                                 title="Create Room"
-                                className="px-2.5 py-1.5 bg-neutral-900 text-white rounded-md text-xs hover:bg-neutral-800"
+                                className="px-2.5 py-1.5 bg-primary text-white rounded-md text-xs hover:bg-primary-hover"
                             >
                                 +
                             </button>
@@ -142,34 +142,34 @@ const ChatInterface = () => {
                 </div>
 
                 {/* Online Users */}
-                <div className="p-3 border-t border-neutral-200">
-                    <h3 className="text-xs font-medium text-neutral-400 uppercase tracking-wider px-2 mb-2">
+                <div className="p-3 border-t border-border-base">
+                    <h3 className="text-xs font-medium text-text-muted uppercase tracking-wider px-2 mb-2">
                         Online ({users.length})
                     </h3>
                     <div className="space-y-1 max-h-32 overflow-y-auto">
                         {users.map((u, idx) => (
                             <div key={idx} className="flex items-center gap-2 px-2 py-1">
-                                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                <span className="text-sm text-neutral-600 truncate">{u}</span>
+                                <div className="w-2 h-2 bg-primary rounded-full"></div>
+                                <span className="text-sm text-text-muted truncate">{u}</span>
                             </div>
                         ))}
                     </div>
                 </div>
 
                 {/* User */}
-                <div className="p-3 border-t border-neutral-200">
+                <div className="p-3 border-t border-border-base mt-auto">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 bg-neutral-200 rounded-full flex items-center justify-center">
-                                <span className="text-xs font-medium text-neutral-600">
+                            <div className="w-8 h-8 bg-bg-main border border-border-base rounded-full flex items-center justify-center">
+                                <span className="text-xs font-medium text-primary">
                                     {user?.username?.charAt(0).toUpperCase()}
                                 </span>
                             </div>
-                            <span className="text-sm font-medium text-neutral-900">{user?.username}</span>
+                            <span className="text-sm font-medium text-text-main">{user?.username}</span>
                         </div>
                         <button
                             onClick={() => { logout(); navigate('/login'); }}
-                            className="text-xs text-neutral-400 hover:text-neutral-600"
+                            className="text-xs text-text-muted hover:text-red-400 transition-colors"
                         >
                             Sign out
                         </button>
@@ -178,21 +178,21 @@ const ChatInterface = () => {
             </aside>
 
             {/* Main Chat */}
-            <main className="flex-1 flex flex-col">
+            <main className="flex-1 flex flex-col bg-bg-main relative">
                 {/* Header */}
-                <header className="h-14 bg-white border-b border-neutral-200 px-4 flex items-center justify-between">
+                <header className="h-14 bg-bg-surface border-b border-border-base px-4 flex items-center justify-between z-10">
                     <div className="flex items-center gap-3">
-                        <h1 className="font-semibold text-neutral-900"># {currentRoom}</h1>
+                        <h1 className="font-semibold text-text-main"># {currentRoom}</h1>
                         <div className="flex items-center gap-1.5">
-                            <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                            <span className="text-xs text-neutral-500">
+                            <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-primary' : 'bg-red-500'}`}></div>
+                            <span className="text-xs text-text-muted">
                                 {isConnected ? 'Connected' : 'Disconnected'}
                             </span>
                         </div>
                     </div>
                     <button
                         onClick={() => setShowAnalytics(true)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-neutral-600 bg-neutral-100 rounded-lg hover:bg-neutral-200 transition-colors"
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-text-muted bg-bg-main border border-border-base rounded-lg hover:text-text-main hover:border-primary/50 transition-colors"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -202,15 +202,32 @@ const ChatInterface = () => {
                 </header>
 
                 {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                <div className="flex-1 overflow-y-auto p-4 space-y-0.5">
                     {messages.length === 0 && (
                         <div className="flex items-center justify-center h-full text-neutral-400 text-sm">
                             No messages yet. Start the conversation!
                         </div>
                     )}
-                    {messages.map((msg, index) => (
-                        <MessageBubble key={msg.id || index} message={msg} onDelete={deleteMessage} />
-                    ))}
+                    {messages.map((msg, index) => {
+                        const prevMsg = messages[index - 1];
+                        const nextMsg = messages[index + 1];
+                        const isSystemMsg = msg.type === 'join' || msg.type === 'leave';
+                        const prevIsSystem = prevMsg?.type === 'join' || prevMsg?.type === 'leave';
+                        const nextIsSystem = nextMsg?.type === 'join' || nextMsg?.type === 'leave';
+
+                        const isFirst = isSystemMsg || !prevMsg || prevMsg.sender !== msg.sender || prevIsSystem;
+                        const isLast = isSystemMsg || !nextMsg || nextMsg.sender !== msg.sender || nextIsSystem;
+
+                        return (
+                            <MessageBubble
+                                key={msg.id || index}
+                                message={msg}
+                                onDelete={deleteMessage}
+                                isFirst={isFirst}
+                                isLast={isLast}
+                            />
+                        );
+                    })}
                     <div ref={messagesEndRef} />
                     {error && (
                         <div className="text-center text-sm text-red-500 py-2">
@@ -220,7 +237,7 @@ const ChatInterface = () => {
                 </div>
 
                 {/* Input */}
-                <div className="p-4 bg-white border-t border-neutral-200">
+                <div className="p-4 bg-bg-surface border-t border-border-base">
                     <form onSubmit={handleSend} className="flex gap-3">
                         <input
                             type="text"
@@ -228,12 +245,12 @@ const ChatInterface = () => {
                             onChange={(e) => setInputMessage(e.target.value)}
                             placeholder="Type a message..."
                             disabled={!isConnected}
-                            className="flex-1 px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-neutral-300 focus:border-transparent disabled:opacity-50"
+                            className="flex-1 px-4 py-2.5 bg-input-bg border border-border-base rounded-full text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50 placeholder:text-gray-600"
                         />
                         <button
                             type="submit"
                             disabled={!isConnected || !inputMessage.trim()}
-                            className="px-5 py-2.5 bg-neutral-900 text-white text-sm font-medium rounded-full hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            className="px-5 py-2.5 bg-primary text-white text-sm font-medium rounded-full hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                         >
                             Send
                         </button>

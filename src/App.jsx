@@ -31,7 +31,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col bg-bg-main text-text-main">
           <Routes>
             <Route path="/login" element={
               <PublicRoute>
