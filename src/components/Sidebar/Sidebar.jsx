@@ -10,7 +10,7 @@ import UserProfile from './UserProfile';
 const SidebarHeader = ({ onClose, showClose }) => (
     <div className="relative px-4 py-4 border-b border-border-base/50">
         {/* Subtle gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-r from-primary/5 to-transparent pointer-events-none" />
 
         <div className="relative flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -73,9 +73,10 @@ const Sidebar = ({
             {/* Sidebar container */}
             <aside className={clsx(
                 'fixed lg:relative inset-y-0 left-0 z-50',
-                'w-72 lg:w-64 bg-bg-surface flex flex-col',
+                'w-[85vw] max-w-[320px] lg:w-64 bg-bg-surface flex flex-col',
                 'border-r border-border-base/50',
                 'transform transition-transform duration-300 ease-out',
+                'rounded-r-2xl lg:rounded-none',
                 'lg:transform-none lg:translate-x-0',
                 'shadow-2xl lg:shadow-none',
                 isOpen ? 'translate-x-0' : '-translate-x-full'
