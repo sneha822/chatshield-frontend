@@ -8,25 +8,25 @@ import UserProfile from './UserProfile';
  * Sidebar header with logo and subtle gradient
  */
 const SidebarHeader = ({ onClose, showClose }) => (
-    <div className="relative px-4 py-4 border-b border-border-base/50">
+    <div className="relative px-3 py-3 border-b border-border-base/30">
         {/* Subtle gradient overlay */}
         <div className="absolute inset-0 bg-linear-to-r from-primary/5 to-transparent pointer-events-none" />
 
         <div className="relative flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
                 <div className="relative">
-                    <div className="absolute inset-0 bg-primary/20 rounded-lg blur-md" />
+                    <div className="absolute inset-0 bg-primary/20 rounded-lg blur-sm" />
                     <img
                         src="/images/logo.png"
                         alt="ChatShield"
-                        className="relative w-8 h-8 object-contain"
+                        className="relative w-6 h-6 object-contain"
                     />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col -space-y-0.5">
                     <span className="font-semibold text-text-main text-sm tracking-tight">
                         ChatShield
                     </span>
-                    <span className="text-[9px] text-primary font-medium tracking-wide uppercase">
+                    <span className="text-[9px] text-primary/80 font-medium tracking-wide uppercase">
                         Secure Chat
                     </span>
                 </div>
@@ -34,9 +34,9 @@ const SidebarHeader = ({ onClose, showClose }) => (
             {showClose && (
                 <button
                     onClick={onClose}
-                    className="p-1.5 text-text-muted hover:text-text-main hover:bg-bg-surface-hover rounded-lg transition-all lg:hidden"
+                    className="p-1 text-text-muted hover:text-text-main hover:bg-bg-surface-hover rounded-md transition-all lg:hidden"
                 >
-                    <CloseIcon className="w-5 h-5" />
+                    <CloseIcon className="w-4 h-4" />
                 </button>
             )}
         </div>

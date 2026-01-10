@@ -15,15 +15,15 @@ const UserItem = ({ username, index }) => {
     const colorClass = colors[index % colors.length];
 
     return (
-        <div className="flex items-center gap-2.5 px-1 py-1.5 rounded-md hover:bg-bg-surface-hover transition-colors">
+        <div className="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-bg-surface-hover/50 transition-colors cursor-default">
             <div className={clsx(
-                'w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-semibold',
+                'w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold',
                 colorClass
             )}>
                 {username?.charAt(0).toUpperCase()}
             </div>
-            <span className="text-xs text-text-muted truncate flex-1">{username}</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+            <span className="text-[11px] text-text-muted hover:text-text-main truncate flex-1 transition-colors">{username}</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-primary shadow-sm shadow-primary/50" />
         </div>
     );
 };
@@ -35,18 +35,20 @@ const OnlineUsers = ({ users }) => {
     if (!users || users.length === 0) return null;
 
     return (
-        <div className="px-3 py-4 border-t border-border-base/50">
-            <div className="flex items-center gap-2 px-2 mb-3">
-                <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
-                </span>
-                <span className="text-[10px] font-bold text-text-muted/60 uppercase tracking-widest">
+        <div className="px-2 py-3 border-t border-border-base/30">
+            <div className="flex items-center justify-between px-2 mb-2">
+                <span className="text-[10px] font-bold text-text-muted/40 uppercase tracking-widest">
                     Online
                 </span>
-                <span className="text-[10px] font-semibold text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">
-                    {users.length}
-                </span>
+                <div className="flex items-center gap-1.5 bg-bg-main/50 px-1.5 py-0.5 rounded-full">
+                    <span className="relative flex h-1.5 w-1.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary" />
+                    </span>
+                    <span className="text-[9px] font-medium text-text-muted/60">
+                        {users.length}
+                    </span>
+                </div>
             </div>
             <div className="space-y-0.5 max-h-32 overflow-y-auto">
                 {users.map((user, idx) => (
