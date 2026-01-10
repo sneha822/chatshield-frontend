@@ -15,7 +15,24 @@ export const getMessageId = (message) => {
 export const formatTime = (timestamp) => {
     if (!timestamp) return '';
     try {
-        return new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        // Backend sends UTC ISO string without 'Z' (e.g. 2023-10-27T10:00:00.000000)
+        // We ensure it's treated as UTC by appending 'Z' if missing and no timezone offset is present
+        let timeStr = timestamp;
+        if (typeof timestamp === 'string' &&
+            !timestamp.endsWith('Z') &&
+            !/[+-]\d{2}:?\d{2}$/.test(timestamp)) {
+            timeStr += 'Z';
+        }
+
+        const date = new Date(timeStr);
+        // Ensure date is valid
+        if (isNaN(date.getTime())) return '';
+
+        return date.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
     } catch (e) {
         return '';
     }

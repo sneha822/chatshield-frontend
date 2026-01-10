@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { useAuth } from '../../context/AuthContext';
 import { getToxicityLevel, TOXICITY_LEVELS } from '../../utils/messageUtils';
@@ -57,6 +57,8 @@ const DeleteButton = ({ onClick }) => (
 const MessageBubble = ({ message, onDelete, isFirst = true, isLast = true }) => {
     const { user } = useAuth();
     const [isRevealed, setIsRevealed] = useState(false);
+
+
 
     const isOwnMessage = message.sender?.toLowerCase() === user?.username?.toLowerCase();
     const isSystem = message.type === 'join' || message.type === 'leave';
@@ -161,4 +163,4 @@ const MessageBubble = ({ message, onDelete, isFirst = true, isLast = true }) => 
     );
 };
 
-export default MessageBubble;
+export default React.memo(MessageBubble);
