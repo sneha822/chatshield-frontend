@@ -116,3 +116,33 @@
     animation: slideIn 0.3s ease-out;
   }
 }
+
+/* Custom Scrollbar - Minimal & Dark */
+@layer base {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #334155; /* Slate 700 */
+    border-radius: 99px;
+    border: 1px solid transparent; 
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #475569; /* Slate 600 */
+    border: 1px solid transparent; 
+    background-clip: content-box;
+  }
+}
+
+/* For specific containers if needed */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
