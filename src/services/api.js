@@ -80,6 +80,19 @@ export const api = {
         return response.json();
     },
 
+    async getRoomDetails(roomId, token) {
+        const response = await fetch(`${API_BASE_URL}/chat/rooms/${roomId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        await handleAuthResponse(response);
+        if (!response.ok) {
+            throw new Error('Failed to fetch room details');
+        }
+        return response.json();
+    },
+
     async getRoomAnalytics(roomId) {
         const response = await fetch(`${API_BASE_URL}/analytics/rooms/${roomId}`);
         if (!response.ok) {
@@ -88,14 +101,17 @@ export const api = {
         return response.json();
     },
 
-    async createRoom(roomId, name) {
+    async createRoom(roomId, name, token) {
         const response = await fetch(`${API_BASE_URL}/chat/rooms`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({ room_id: roomId, name: name || roomId }),
         });
+
+        await handleAuthResponse(response);
 
         if (response.status === 400) {
             throw new Error('Room already exists');
@@ -143,5 +159,39 @@ export const api = {
         }
         const data = await response.json();
         return data.messages || [];
+    },
+
+    async getMutedUsers(roomId, token) {
+        const response = await fetch(`${API_BASE_URL}/chat/rooms/${roomId}/muted-users`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        await handleAuthResponse(response);
+        if (response.status === 403) {
+            // Not authorized - only room creator can view muted users
+            return { muted_users: [], is_authorized: false };
+        }
+        if (!response.ok) {
+            throw new Error('Failed to fetch muted users');
+        }
+        const data = await response.json();
+        return { ...data, is_authorized: true };
+    },
+
+    async unmuteUser(roomId, username, token) {
+        const response = await fetch(`${API_BASE_URL}/chat/rooms/${roomId}/unmute/${username}`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        await handleAuthResponse(response);
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.detail || 'Failed to unmute user');
+        }
+        return response.json();
     }
 };

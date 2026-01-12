@@ -31,6 +31,7 @@ const ChatInterface = () => {
 
     // State
     const [rooms, setRooms] = useState([]);
+    const [roomDetails, setRoomDetails] = useState(null);
     const [inputMessage, setInputMessage] = useState('');
     const [newRoomInput, setNewRoomInput] = useState('');
     const [showAnalytics, setShowAnalytics] = useState(false);
@@ -65,6 +66,23 @@ const ChatInterface = () => {
         if (token) fetchRooms();
     }, [token]);
 
+    // Fetch room details (including creator) when room changes
+    useEffect(() => {
+        const fetchRoomDetails = async () => {
+            try {
+                const details = await api.getRoomDetails(currentRoom, token);
+                console.log('Room details:', details); // Debug log
+                setRoomDetails(details);
+            } catch (err) {
+                console.error('Failed to fetch room details', err);
+                setRoomDetails(null);
+            }
+        };
+        if (token && currentRoom) {
+            fetchRoomDetails();
+        }
+    }, [token, currentRoom]);
+
     // Handlers
     const handleSendMessage = (message) => {
         sendMessage(message);
@@ -98,7 +116,7 @@ const ChatInterface = () => {
         }
 
         try {
-            await api.createRoom(roomName);
+            await api.createRoom(roomName, roomName, token);
             navigate(`/chat/room/${roomName}`);
             setNewRoomInput('');
             setSidebarOpen(false);
@@ -126,6 +144,7 @@ const ChatInterface = () => {
                 onJoinRoom={handleJoinRoom}
                 onCreateRoom={handleCreateRoom}
                 onlineUsers={users}
+                roomCreator={roomDetails?.creator_username || (roomDetails?.is_creator ? user?.username : null)}
                 user={user}
                 onLogout={handleLogout}
             />

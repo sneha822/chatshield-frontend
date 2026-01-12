@@ -34,7 +34,7 @@ const RoomSelection = () => {
         if (!roomName) return;
 
         try {
-            await api.createRoom(roomName);
+            await api.createRoom(roomName, roomName, token);
             navigate(`/chat/room/${roomName}`);
         } catch (err) {
             if (err.message === 'Room already exists') {

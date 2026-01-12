@@ -57,6 +57,7 @@ const Sidebar = ({
     onJoinRoom,
     onCreateRoom,
     onlineUsers,
+    roomCreator,
     user,
     onLogout
 }) => {
@@ -99,7 +100,7 @@ const Sidebar = ({
                     onCreateRoom={onCreateRoom}
                 />
 
-                <OnlineUsers users={onlineUsers} />
+                <OnlineUsers users={onlineUsers} roomCreator={roomCreator} />
 
                 <UserProfile user={user} onLogout={onLogout} />
             </aside>
