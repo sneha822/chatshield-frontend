@@ -4,6 +4,7 @@ import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import ChatInterface from './components/Chat/ChatInterface';
 import RoomSelection from './components/RoomSelection/RoomSelection';
+import LandingPage from './pages/LandingPage/LandingPage';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -54,7 +55,7 @@ function App() {
                 <RoomSelection />
               </ProtectedRoute>
             } />
-            <Route path="/" element={<Navigate to="/rooms" replace />} />
+            <Route path="/" element={<LandingPage />} />
           </Routes>
         </div>
       </Router>

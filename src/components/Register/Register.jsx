@@ -20,7 +20,12 @@ const Register = () => {
 
         const success = await register(username, password);
         if (success) {
-            navigate('/login');
+            navigate('/login', {
+                state: {
+                    message: 'Successfully registered, now login',
+                    type: 'success'
+                }
+            });
         }
     };
 

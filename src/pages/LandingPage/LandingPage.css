@@ -1,0 +1,411 @@
+/* Scoped CSS for Landing Page */
+.landing-page-root {
+    --accent: #00bfff;
+    --bg: #070b18;
+    /* Main dark background color */
+    --glass: rgba(0, 191, 255, .12);
+
+    font-family: Inter, system-ui;
+    background: var(--bg);
+    color: #e6eef7;
+    overflow-x: hidden;
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* GLOBAL RESET within wrapper */
+.landing-page-root * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+/* BACKGROUND */
+.landing-page-root .bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    /* Changed from -1 to 0 to sit behind content but inside root */
+    background: var(--bg);
+}
+
+/* NAVBAR */
+.landing-page-root nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    /* Ensure fixed elements are positioned correctly */
+    width: 100%;
+    height: 60px;
+    padding: 0 6%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(20px);
+    background: rgba(5, 8, 18, .7);
+    border-bottom: 1px solid rgba(0, 191, 255, .15);
+    z-index: 100;
+}
+
+/* BRAND (LOGO + NAME) */
+.landing-page-root .brand {
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+    font-size: 1.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: inherit;
+    text-decoration: none;
+}
+
+.landing-page-root .brand img {
+    height: 34px;
+    filter: drop-shadow(0 0 15px rgba(0, 191, 255, .9));
+}
+
+.landing-page-root .brand .chat {
+    color: #1e90ff;
+    text-shadow: 0 0 20px rgba(30, 144, 255, .45);
+}
+
+.landing-page-root .brand .shield {
+    color: #22c55e;
+    text-shadow: 0 0 20px rgba(34, 197, 94, .45);
+}
+
+.landing-page-root .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+}
+
+.landing-page-root .nav-links a {
+    text-decoration: none;
+    color: #e6eef7;
+    font-weight: 500;
+    position: relative;
+}
+
+.landing-page-root .nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    left: 0;
+    bottom: -4px;
+    background: var(--accent);
+    transition: .3s;
+}
+
+.landing-page-root .nav-links a:hover::after {
+    width: 100%;
+}
+
+.landing-page-root .nav-links a:hover {
+    color: var(--accent);
+}
+
+/* HERO SECTION */
+.landing-page-root .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6rem 6% 0;
+    position: relative;
+    z-index: 1;
+}
+
+.landing-page-root .hero h1 {
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    background: linear-gradient(to right, #f1f5f9, #e5e7ed);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.landing-page-root .hero p {
+    margin-top: 1rem;
+    font-size: 1.25rem;
+    max-width: 700px;
+    color: #a7b6cc;
+    margin-bottom: 1.5rem;
+}
+
+.landing-page-root .hero-logo {
+    width: 220px;
+    margin: 1.2rem 0;
+    filter: drop-shadow(0 0 35px rgba(0, 191, 255, .9));
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-18px);
+    }
+}
+
+.landing-page-root .logo-text {
+    font-size: 2.4rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    margin: 0.5rem 0 1.6rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.15em;
+}
+
+.landing-page-root .logo-text .chat {
+    color: #1e90ff;
+    text-shadow: 0 0 20px rgba(30, 144, 255, .45);
+    text-transform: uppercase;
+}
+
+.landing-page-root .logo-text .shield {
+    color: #22c55e;
+    text-shadow: 0 0 20px rgba(34, 197, 94, .45);
+    text-transform: uppercase;
+}
+
+.landing-page-root .actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.landing-page-root .btn-primary {
+    padding: 0.9rem 2.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    background: linear-gradient(to right, #38bdf8, #6366f1);
+    color: black;
+    box-shadow: 0 6px 25px rgba(0, 191, 255, 0.45);
+    transition: .3s;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.landing-page-root .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 40px rgba(0, 191, 255, .6);
+}
+
+.landing-page-root .btn-secondary {
+    padding: 0.9rem 2.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 1px solid #475569;
+    color: #e5e7ed;
+    background: none;
+    transition: .3s;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.landing-page-root .btn-secondary:hover {
+    border-color: #38bdf8;
+    transform: translateY(-3px);
+}
+
+/* SECTIONS */
+.landing-page-root .section {
+    padding: 5rem 6%;
+    scroll-margin-top: 80px;
+    position: relative;
+    z-index: 1;
+}
+
+.landing-page-root #features h2,
+.landing-page-root #use-cases h2,
+.landing-page-root #about h3,
+.landing-page-root #contact h3 {
+    text-align: center;
+}
+
+.landing-page-root #features h2,
+.landing-page-root #use-cases h2 {
+    font-size: 2.2rem;
+    margin-bottom: 3rem;
+}
+
+/* GRID CARDS */
+.landing-page-root .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.landing-page-root .card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, .06), transparent);
+    border: 1px solid rgba(0, 191, 255, .25);
+    border-radius: 20px;
+    padding: 2.4rem;
+    text-align: center;
+    backdrop-filter: blur(20px);
+    transition: .45s;
+}
+
+.landing-page-root .card:hover {
+    transform: translateY(-12px);
+    border-color: var(--accent);
+    box-shadow: 0 0 45px rgba(0, 191, 255, .25);
+}
+
+.landing-page-root .feature-icon {
+    font-size: 2.5rem;
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #38bdf8, #6366f1);
+    border-radius: 14px;
+    box-shadow: 0 0 20px rgba(56, 189, 248, .45);
+}
+
+.landing-page-root .card h3 {
+    font-size: 1.25rem;
+    margin-bottom: .7rem;
+}
+
+.landing-page-root .card p {
+    color: #a7b6cc;
+    font-size: .95rem;
+    line-height: 1.7;
+}
+
+/* USE CASES GRID */
+.landing-page-root .usecase-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+}
+
+.landing-page-root .usecase-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, .06), transparent);
+    border: 1px solid rgba(0, 191, 255, .25);
+    border-radius: 20px;
+    padding: 2.2rem 1.8rem;
+    text-align: center;
+    backdrop-filter: blur(18px);
+    transition: .45s ease;
+}
+
+.landing-page-root .usecase-card:hover {
+    transform: translateY(-12px);
+    border-color: var(--accent);
+    box-shadow: 0 0 45px rgba(0, 191, 255, .3);
+}
+
+.landing-page-root .usecase-icon {
+    width: 62px;
+    height: 62px;
+    margin: 0 auto 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #38bdf8, #6366f1);
+    box-shadow: 0 0 25px rgba(56, 189, 248, .45);
+    font-size: 1.8rem;
+}
+
+/* ABOUT & CONTACT */
+.landing-page-root .prefooter-contact,
+.landing-page-root #about {
+    background: rgba(255, 255, 255, .03);
+    border: 1px solid rgba(255, 255, 255, .08);
+    padding: 3rem 6%;
+    border-radius: 12px;
+    margin: 2rem 6%;
+    position: relative;
+    z-index: 1;
+}
+
+.landing-page-root .prefooter-contact h3,
+.landing-page-root #about h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.landing-page-root .prefooter-contact p,
+.landing-page-root #about p {
+    max-width: 720px;
+    margin: 0 auto;
+    color: #a7b6cc;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.landing-page-root .prefooter-email {
+    display: block;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #e6eef7;
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.landing-page-root .prefooter-email:hover {
+    color: var(--accent);
+}
+
+.landing-page-root .section-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(0, 191, 255, .35), transparent);
+    margin: 3rem 6%;
+    position: relative;
+    z-index: 1;
+}
+
+.landing-page-root .highlight-text {
+    background: linear-gradient(90deg, #2563eb, #38bdf8);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.landing-page-root .hero-visual-band {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    overflow: hidden;
+    z-index: 0;
+}
+
+.landing-page-root .hero-visual-band img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    opacity: 0.85;
+    display: block;
+}
+
+.landing-page-root .hero-visual-band::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, var(--bg) 0%, rgba(7, 11, 24, 0.15) 30%, rgba(7, 11, 24, 0.15) 70%, var(--bg) 100%);
+    pointer-events: none;
+}

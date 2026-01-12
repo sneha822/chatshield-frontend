@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const Login = () => {
@@ -7,6 +7,9 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const { login, loading, error } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+    const message = location.state?.message;
+    const messageType = location.state?.type;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -26,6 +29,12 @@ const Login = () => {
                     <h1 className="text-2xl font-semibold text-text-main">Welcome back</h1>
                     <p className="text-text-muted text-sm mt-1">Sign in to your account</p>
                 </div>
+
+                {message && messageType === 'success' && (
+                    <div className="bg-green-500/10 border border-green-500/20 text-green-400 text-sm p-3 rounded-lg mb-4 text-center">
+                        {message}
+                    </div>
+                )}
 
                 {error && (
                     <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3 rounded-lg mb-4 text-center">
