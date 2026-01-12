@@ -1,10 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 import MessageBubble from './MessageBubble';
+import { MuteSystemMessage } from './MuteNotifications';
 
 /**
  * Helper to determine if a message is a system message
  */
-const isSystemMessage = (msg) => msg?.type === 'join' || msg?.type === 'leave';
+const isSystemMessage = (msg) => 
+    msg?.type === 'join' || 
+    msg?.type === 'leave' || 
+    msg?.type === 'system_mute';
 
 /**
  * Message list with auto-scroll and grouping logic
@@ -29,6 +33,17 @@ const MessageList = ({ messages, onDeleteMessage }) => {
     return (
         <div className="flex-1 overflow-y-auto px-3 py-2">
             {messages.map((msg, index) => {
+                // Handle mute system messages (user muted/unmuted broadcasts)
+                if (msg.type === 'system_mute') {
+                    return (
+                        <MuteSystemMessage
+                            key={`mute-${index}`}
+                            content={msg.content}
+                            type={msg.muteType}
+                        />
+                    );
+                }
+
                 const prevMsg = messages[index - 1];
                 const nextMsg = messages[index + 1];
                 const isSysMsg = isSystemMessage(msg);

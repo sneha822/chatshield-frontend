@@ -47,5 +47,21 @@ export const MESSAGE_TYPES = {
     CHAT: 'chat',
     SYNC: 'sync',
     DELETE: 'delete',
-    ERROR: 'error'
+    ERROR: 'error',
+    // Mute system message types
+    WARNING: 'warning',
+    MUTED: 'muted',
+    UNMUTED: 'unmuted',
+    MUTE_STATUS: 'mute_status',
+    MUTE_REJECTED: 'mute_rejected',
+};
+
+/**
+ * Notification types for the mute system
+ */
+export const NOTIFICATION_TYPES = {
+    WARNING: 'warning',
+    MUTED: 'muted',
+    UNMUTED: 'unmuted',
+    REJECTED: 'rejected',
 };

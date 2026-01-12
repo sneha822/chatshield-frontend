@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useChat } from '../../hooks/useChat';
 import { api } from '../../services/api';
+import { NOTIFICATION_TYPES } from '../../utils/chatUtils';
 
 // Reusable components
 import Sidebar from '../Sidebar/Sidebar';
@@ -10,6 +11,13 @@ import ChatHeader from './ChatHeader';
 import ChatInput from './ChatInput';
 import MessageList from './MessageList';
 import AnalyticsView from '../Analytics/AnalyticsView';
+import {
+    WarningToast,
+    MuteBanner,
+    UnmuteNotification,
+    RejectedToast,
+    WarningStatusBar,
+} from './MuteNotifications';
 
 /**
  * Main chat interface - responsive layout with sidebar
@@ -28,14 +36,20 @@ const ChatInterface = () => {
     const [showAnalytics, setShowAnalytics] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
-    // Chat hook
+    // Chat hook with mute support
     const {
         messages,
         users,
         isConnected,
         error,
         sendMessage,
-        deleteMessage
+        deleteMessage,
+        // Mute-related
+        muteInfo,
+        formatRemainingTime,
+        canSendMessage,
+        notification,
+        clearNotification,
     } = useChat(token, currentRoom);
 
     // Fetch rooms on mount
@@ -47,7 +61,7 @@ const ChatInterface = () => {
             } catch (err) {
                 console.error('Failed to fetch rooms', err);
             }
-        };
+        }
         if (token) fetchRooms();
     }, [token]);
 
@@ -125,6 +139,22 @@ const ChatInterface = () => {
                     onAnalyticsClick={() => setShowAnalytics(true)}
                 />
 
+                {/* Mute Banner - Shows when user is muted */}
+                {muteInfo.isMuted && (
+                    <MuteBanner 
+                        remainingTime={formatRemainingTime()} 
+                        muteInfo={muteInfo} 
+                    />
+                )}
+
+                {/* Warning Status Bar - Shows when not muted but has consecutive warnings */}
+                {!muteInfo.isMuted && muteInfo.consecutiveToxicCount > 0 && (
+                    <WarningStatusBar 
+                        consecutiveCount={muteInfo.consecutiveToxicCount}
+                        threshold={muteInfo.toxicThreshold || 5}
+                    />
+                )}
+
                 <MessageList
                     messages={messages}
                     onDeleteMessage={deleteMessage}
@@ -140,7 +170,9 @@ const ChatInterface = () => {
                     value={inputMessage}
                     onChange={setInputMessage}
                     onSubmit={handleSendMessage}
-                    disabled={!isConnected}
+                    disabled={!isConnected || !canSendMessage}
+                    isMuted={muteInfo.isMuted}
+                    mutedPlaceholder={`Muted for ${formatRemainingTime() || '0:00'}...`}
                 />
             </main>
 
@@ -149,6 +181,26 @@ const ChatInterface = () => {
                 <AnalyticsView
                     roomId={currentRoom}
                     onClose={() => setShowAnalytics(false)}
+                />
+            )}
+
+            {/* Mute Notifications */}
+            {notification?.type === NOTIFICATION_TYPES.WARNING && (
+                <WarningToast
+                    message={notification.message}
+                    muteInfo={notification.muteInfo}
+                    onClose={clearNotification}
+                />
+            )}
+
+            {notification?.type === NOTIFICATION_TYPES.UNMUTED && (
+                <UnmuteNotification onClose={clearNotification} />
+            )}
+
+            {notification?.type === NOTIFICATION_TYPES.REJECTED && (
+                <RejectedToast
+                    message={notification.message}
+                    onClose={clearNotification}
                 />
             )}
         </div>
