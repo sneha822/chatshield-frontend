@@ -34,7 +34,7 @@ const LandingPage = () => {
                     <span className="chat">CHAT</span><span className="shield">SHIELD</span>
                 </div>
                 <div className="actions">
-                    <a href="#features" className="btn-primary">View Demo</a>
+                    <Link to="/register" className="btn-primary">View Demo</Link>
                     <Link to="/register" className="btn-secondary">Sign Up</Link>
                 </div>
             </section>
